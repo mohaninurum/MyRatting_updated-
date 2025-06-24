@@ -1,0 +1,2 @@
+/Users/tarannumkhan/Downloads/Development/AndroidStudioProjects/myRatingApp/android/app/.cxx/Debug/6t3k384u/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/tarannumkhan/Downloads/Development/AndroidStudioProjects/myRatingApp/android/app/.cxx/Debug/6t3k384u/armeabi-v7a/CMakeFiles/rebuild_cache.dir

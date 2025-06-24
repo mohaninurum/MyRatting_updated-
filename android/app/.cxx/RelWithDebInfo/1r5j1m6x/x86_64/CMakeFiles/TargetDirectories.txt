@@ -1,0 +1,2 @@
+D:/Inurum Pragya/card/card/android/app/.cxx/RelWithDebInfo/1r5j1m6x/x86_64/CMakeFiles/edit_cache.dir
+D:/Inurum Pragya/card/card/android/app/.cxx/RelWithDebInfo/1r5j1m6x/x86_64/CMakeFiles/rebuild_cache.dir

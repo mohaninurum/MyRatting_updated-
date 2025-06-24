@@ -1,0 +1,1 @@
+/Users/tarannumkhan/Downloads/Development/AndroidStudioProjects/myRatingApp/build/app/intermediates/cxx/Debug/6t3k384u/obj/arm64-v8a

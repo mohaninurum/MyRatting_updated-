@@ -1,0 +1,166 @@
+{
+  "project_info": {
+    "project_number": "406032902985",
+    "project_id": "swipe-ranks",
+    "storage_bucket": "swipe-ranks.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406032902985:android:0f0c6d94a91e7762ed4898",
+        "android_client_info": {
+          "package_name": "com.example.card"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406032902985-9qaltjngucfu91ghsabhqtrvk2585fm4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.card",
+            "certificate_hash": "348e54e0889803d91f8c49cd2d7eaa7a5b624e89"
+          }
+        },
+        {
+          "client_id": "406032902985-l0rcmjbehln385u0impvkinhep04k4ui.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.card",
+            "certificate_hash": "09298b86d0b75bd273aa757a4e9c6a88c62fe14a"
+          }
+        },
+        {
+          "client_id": "406032902985-vve1bpj953d9r8eqsrg81feltmfe3759.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.card",
+            "certificate_hash": "f641ed5d097106a3710a7e879e9b6d1754e9d970"
+          }
+        },
+        {
+          "client_id": "406032902985-jvcbqsh2puga9p4bhqj9bfsb2pih3kpi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARLbTaK-GDfvkdtfIhhpAhbWXuxsLx1r4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "406032902985-jvcbqsh2puga9p4bhqj9bfsb2pih3kpi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "406032902985-3d88qerbll581v59vju524g0blfppriq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.card"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406032902985:android:5d3ea5eebba91181ed4898",
+        "android_client_info": {
+          "package_name": "com.myRating.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406032902985-06n17vusmsjn8kcrb3utt2mv5iips6qe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myRating.app",
+            "certificate_hash": "09298b86d0b75bd273aa757a4e9c6a88c62fe14a"
+          }
+        },
+        {
+          "client_id": "406032902985-dpto64mbjqdrg0phjgga7pgskf3lphlj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myRating.app",
+            "certificate_hash": "f641ed5d097106a3710a7e879e9b6d1754e9d970"
+          }
+        },
+        {
+          "client_id": "406032902985-qain4sv18mpe4pd995hkk8jgjsn5p55j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myRating.app",
+            "certificate_hash": "348e54e0889803d91f8c49cd2d7eaa7a5b624e89"
+          }
+        },
+        {
+          "client_id": "406032902985-jvcbqsh2puga9p4bhqj9bfsb2pih3kpi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARLbTaK-GDfvkdtfIhhpAhbWXuxsLx1r4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "406032902985-jvcbqsh2puga9p4bhqj9bfsb2pih3kpi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "406032902985-3d88qerbll581v59vju524g0blfppriq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.card"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406032902985:android:3db40bbd3c76d9f6ed4898",
+        "android_client_info": {
+          "package_name": "com.myrating.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406032902985-jvcbqsh2puga9p4bhqj9bfsb2pih3kpi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARLbTaK-GDfvkdtfIhhpAhbWXuxsLx1r4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "406032902985-jvcbqsh2puga9p4bhqj9bfsb2pih3kpi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "406032902985-3d88qerbll581v59vju524g0blfppriq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.card"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,2 @@
+D:/Inurum Pragya/card/card/android/app/.cxx/Debug/i2bs3n82/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/Inurum Pragya/card/card/android/app/.cxx/Debug/i2bs3n82/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,1 @@
+/Users/subhashsahu/AndroidStudioProjects/card/build/app/intermediates/cxx/Debug/2d2p1g1d/obj/x86_64

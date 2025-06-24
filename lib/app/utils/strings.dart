@@ -1,0 +1,32 @@
+class Strings {
+  static String home = '';
+  static String getwegtNm = "Can we get your number ?";
+  static String bytapping = 'By tapping "Sign in" , you agree to our Terms.Learn how we process your data in our Privacy Policy and Cookies Policy';
+  static String wetxtyoua = "We’ll text you a code to verify you’re really you.\nMessage and data rates may apply. What happens if your number changes?";
+  static String entrcode = "Enter your code";
+  static String tryAgain = "Didn't get anything? No worries, let's try again.";
+  static String resend = "Resend";
+  static String next = "Next";
+  static String submit = "Submit";
+  static String fillDetail = "Fill your details";
+  static String chooseCategory = "Choose Category";
+  static String notification = "Notification";
+  static String editProfile = "Edit Profile";
+  static String addCard = "Add Card";
+  static String pleaseEnterTitle = "Please Enter Title";
+  static String pleaseEnterSuggestn = "Please Enter Suggestion";
+  static String pleaseEnterDescptn = "Please Enter Description";
+  static String title = "Title";
+  static String suggestion = "Suggestion";
+  static String description = "Description";
+  static String cardActivity = "Card Activity";
+  static String cardDetail = "Card Detail";
+  static String reason = "Reason";
+  static String exploreCardRank = "Explore Top Rank";
+  static String swipeCard = "Swipe Card";
+  static String exploreCategories = "Explore Categories";
+  static String exploreSubCategories = "Explore SubCategories";
+  static String privacyPolicy = "Privacy Policy";
+  static String whyAreYouReprtngThsCrd = "Why are you reporting this Card";
+  static String actionImpact = "Your action creates impact.";
+}
