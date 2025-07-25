@@ -71,6 +71,9 @@ dependencies:
   app_links: ^6.4.0
   reorderables: ^0.6.0
   cached_network_image: ^3.4.1
+  flutter_launcher_icons: ^0.14.4
+  shimmer: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:
@@ -108,6 +111,14 @@ flutter:
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/appicon.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/appicon.png"
+
+
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

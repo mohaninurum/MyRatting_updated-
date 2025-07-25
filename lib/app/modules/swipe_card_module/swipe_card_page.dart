@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card/app/modules/swipe_card_module/swipe_card_controller.dart';
+import 'package:card/app/response_model/get_card_response/get_card_response.dart';
 import 'package:card/app/utils/appColors.dart';
 import 'package:card/app/utils/appFonts.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,6 +30,8 @@ class SwipeCardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    SwipeItem currentCard;
+    CardData cardData;
     return Scaffold(
       body: WillPopScope(
         onWillPop: _onWillPop,
@@ -49,10 +52,7 @@ class SwipeCardPage extends StatelessWidget {
                     ),
                     Text(
                       "My Rating App",
-                      style: AppFonts.IBMPlexSans.copyWith(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColor),
+                      style: AppFonts.IBMPlexSans.copyWith(fontSize: 25, fontWeight: FontWeight.bold, color: AppColors.primaryColor),
                     ),
                     Spacer(),
                     InkWell(
@@ -99,16 +99,13 @@ class SwipeCardPage extends StatelessWidget {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(60),
                                 color: Colors.white,
-                                border:
-                                    Border.all(color: AppColors.primaryColor, width: 7),
+                                border: Border.all(color: AppColors.primaryColor, width: 7),
                               ),
                               child: Stack(
                                 children: [
                                   Obx(() {
                                     final imageIndex = controller.currentImageIndex.value;
-                                    final image = imageIndex < currentCard.content.length
-                                        ? currentCard.content[imageIndex]
-                                        : currentCard.content.last;
+                                    final image = imageIndex < currentCard.content.length ? currentCard.content[imageIndex] : currentCard.content.last;
                                     return ClipRRect(
                                       borderRadius: BorderRadius.circular(53),
                                       child: CachedNetworkImage(
@@ -129,8 +126,7 @@ class SwipeCardPage extends StatelessWidget {
                                             height: double.infinity,
                                           );
                                         },
-                                        placeholder: (context, url) => const Center(
-                                            child: CupertinoActivityIndicator()),
+                                        placeholder: (context, url) => const Center(child: CupertinoActivityIndicator()),
                                       ),
                                     );
                                   }),
@@ -140,10 +136,7 @@ class SwipeCardPage extends StatelessWidget {
                                       height: 200,
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
-                                          colors: [
-                                            AppColors.primaryColor,
-                                            Colors.transparent
-                                          ],
+                                          colors: [AppColors.primaryColor, Colors.transparent],
                                           begin: Alignment.bottomCenter,
                                           end: Alignment.topCenter,
                                         ),
@@ -163,11 +156,7 @@ class SwipeCardPage extends StatelessWidget {
                                     },
                                     child: Container(
                                       width: 50,
-                                      decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(53),
-                                              topLeft: Radius.circular(53))),
+                                      decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(53), topLeft: Radius.circular(53))),
                                     ),
                                   ),
                                   Align(
@@ -175,19 +164,14 @@ class SwipeCardPage extends StatelessWidget {
                                     child: GestureDetector(
                                       onTap: () {
                                         final currentCard = controller.swipeItems[index];
-                                        if (controller.currentImageIndex.value <
-                                            currentCard.content.length - 1) {
+                                        if (controller.currentImageIndex.value < currentCard.content.length - 1) {
                                           controller.currentImageIndex.value++;
                                         }
                                         print("Clicked Right");
                                       },
                                       child: Container(
                                         width: 50,
-                                        decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            borderRadius: BorderRadius.only(
-                                                bottomRight: Radius.circular(53),
-                                                topRight: Radius.circular(53))),
+                                        decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.only(bottomRight: Radius.circular(53), topRight: Radius.circular(53))),
                                       ),
                                     ),
                                   ),
@@ -239,10 +223,7 @@ class SwipeCardPage extends StatelessWidget {
                                                 color: Colors.white,
                                                 fontSize: 22,
                                                 fontWeight: FontWeight.bold,
-                                                shadows: [
-                                                  Shadow(
-                                                      blurRadius: 2, color: Colors.black)
-                                                ],
+                                                shadows: [Shadow(blurRadius: 2, color: Colors.black)],
                                               ),
                                             ),
                                             const SizedBox(height: 4),
@@ -251,10 +232,7 @@ class SwipeCardPage extends StatelessWidget {
                                               style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 16,
-                                                shadows: [
-                                                  Shadow(
-                                                      blurRadius: 2, color: Colors.black)
-                                                ],
+                                                shadows: [Shadow(blurRadius: 2, color: Colors.black)],
                                               ),
                                             ),
                                           ],
@@ -281,47 +259,42 @@ class SwipeCardPage extends StatelessWidget {
                                         ),
                                         Obx(() => IconButton(
                                               icon: SvgPicture.asset(
-                                                controller.isDisLiked.value
-                                                    ? 'assets/images/cancel.svg'
-                                                    : "assets/images/canceled.svg",
+                                                controller.isDisLiked.value ? 'assets/images/cancel.svg' : "assets/images/canceled.svg",
                                                 width: 30,
                                                 height: 30,
                                               ),
                                               onPressed: () {
-                                                controller.matchEngine?.currentItem
-                                                    ?.nope();
-                                                controller.disLikeApi(
-                                                    cardData.card_id_PK.toString());
+                                                controller.currentImageIndex.value = index;
+                                                controller.swipeHistory.add(controller.swipeItems[index]);
+                                                controller.subCategoryHistory.add(controller.subCategoryList[index]);
+                                                controller.matchEngine?.currentItem?.nope();
+                                                controller.disLikeApi(cardData.card_id_PK.toString());
                                               },
                                             )),
                                         Obx(() => IconButton(
                                               icon: SvgPicture.asset(
-                                                controller.isLiked.value
-                                                    ? 'assets/images/like.svg'
-                                                    : 'assets/images/liked.svg',
+                                                controller.isLiked.value ? 'assets/images/like.svg' : 'assets/images/liked.svg',
                                                 width: 35,
                                                 height: 35,
                                               ),
                                               onPressed: () {
-                                                controller.matchEngine?.currentItem
-                                                    ?.like();
-                                                controller.likeApi(
-                                                    cardData.card_id_PK.toString());
+                                                controller.currentImageIndex.value = index;
+                                                // controller.swipeHistory.add(controller.swipeItems[index]);
+                                                // controller.subCategoryHistory.add(controller.subCategoryList[index]);
+                                                controller.matchEngine?.currentItem?.like();
+                                                controller.likeApi(cardData.card_id_PK.toString());
                                               },
                                             )),
                                         Obx(() => IconButton(
                                               icon: SvgPicture.asset(
-                                                controller.isSuperLike.value
-                                                    ? "assets/images/superlike.svg"
-                                                    : 'assets/images/superLiked.svg',
+                                                controller.isSuperLike.value ? "assets/images/superlike.svg" : 'assets/images/superLiked.svg',
                                                 width: 35,
                                                 height: 35,
                                               ),
                                               onPressed: () {
-                                                controller.matchEngine?.currentItem
-                                                    ?.superLike();
-                                                controller.superLikeApi(
-                                                    cardData.card_id_PK.toString());
+                                                controller.currentImageIndex.value = index;
+                                                controller.matchEngine?.currentItem?.superLike();
+                                                controller.superLikeApi(cardData.card_id_PK.toString());
                                               },
                                             )),
                                         IconButton(
@@ -411,8 +384,7 @@ class SwipeCardPage extends StatelessWidget {
                           ? Center(
                               child: Text(
                                 "All cards swiped!",
-                                style:
-                                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                             )
                           : const SizedBox.shrink()),

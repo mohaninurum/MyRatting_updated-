@@ -14,10 +14,11 @@ import 'api_checker.dart';
 import 'error_response.dart';
 
 class ApiClient extends GetxService {
-  final String appBaseUrl = "http://myephysician.com/myratingsystem/api/";
-  final String url = "http://myephysician.com/myratingsystem/uploads/icons/";
-  static const String noInternetMessage =
-      'Connection to API server failed due to internet connection';
+  // final String appBaseUrl = "http://myephysician.com/myratingsystem/api/";
+  final String appBaseUrl = "http://swiperanks.com/api/";
+  // final String url = "http://myephysician.com/myratingsystem/uploads/icons/";
+  final String url = "http://swiperanks.com/uploads/icons/";
+  static const String noInternetMessage = 'Connection to API server failed due to internet connection';
   final int timeoutInSeconds = 30;
   String? token;
   String? type;
@@ -25,10 +26,7 @@ class ApiClient extends GetxService {
   Map<String, String>? mainHeaders = {
     'Content-Type': 'application/json',
   };
-  Future<Response> getData(String uri,
-      {Map<String, dynamic>? query,
-      Map<String, String>? headers,
-      bool handleError = true}) async {
+  Future<Response> getData(String uri, {Map<String, dynamic>? query, Map<String, String>? headers, bool handleError = true}) async {
     print("HELLO URL :: ${uri}");
     print("HELLO URL FULL :: ${appBaseUrl + uri}");
 
@@ -46,10 +44,9 @@ class ApiClient extends GetxService {
     }
   }
 
-  Future<Response> postData(String uri, dynamic body,
-      {Map<String, String>? headers, bool handleError = true}) async {
+  Future<Response> postData(String uri, dynamic body, {Map<String, String>? headers, bool handleError = true}) async {
     try {
-      debugPrint('====> API Call: $uri\nHeader: $mainHeaders ::: $headers'  );
+      debugPrint('====> API Call: $uri\nHeader: $mainHeaders ::: $headers');
       debugPrint('====> API Body: $body');
       http.Response response = await http
           .post(
@@ -75,8 +72,7 @@ class ApiClient extends GetxService {
       debugPrint('====> API Call: $uri\nHeader: $mainHeaders');
       debugPrint('====> API Body: $body with ${multipartBody.length}');
 
-      http.MultipartRequest request =
-          http.MultipartRequest('POST', Uri.parse(appBaseUrl + uri));
+      http.MultipartRequest request = http.MultipartRequest('POST', Uri.parse(appBaseUrl + uri));
       request.headers.addAll(headers ?? mainHeaders!);
       for (MultipartBody multipart in multipartBody) {
         if (multipart.file != null) {
@@ -117,8 +113,7 @@ class ApiClient extends GetxService {
     }
   }
 
-  Future<Response> putData(String uri, dynamic body,
-      {Map<String, String>? headers, bool handleError = true}) async {
+  Future<Response> putData(String uri, dynamic body, {Map<String, String>? headers, bool handleError = true}) async {
     try {
       debugPrint('====> API Call: $uri\nHeader: $mainHeaders');
       debugPrint('====> API Body: $body');
@@ -137,8 +132,7 @@ class ApiClient extends GetxService {
     }
   }
 
-  Future<Response> deleteData(String uri,
-      {Map<String, String>? headers, bool handleError = true}) async {
+  Future<Response> deleteData(String uri, {Map<String, String>? headers, bool handleError = true}) async {
     try {
       debugPrint('====> API Call: $uri\nHeader: $mainHeaders');
       http.Response response = await http
@@ -165,20 +159,12 @@ class ApiClient extends GetxService {
       statusCode: response.statusCode,
       statusText: response.reasonPhrase,
     );
-    if (response0.statusCode != 200 &&
-        response0.body != null &&
-        response0.body is! String) {
+    if (response0.statusCode != 200 && response0.body != null && response0.body is! String) {
       if (response0.body.toString().startsWith('{errors: [{code:')) {
         ErrorResponse errorResponse = ErrorResponse.fromJson(response0.body);
-        response0 = Response(
-            statusCode: response0.statusCode,
-            body: response0.body,
-            statusText: errorResponse.errors![0].message);
+        response0 = Response(statusCode: response0.statusCode, body: response0.body, statusText: errorResponse.errors![0].message);
       } else if (response0.body.toString().startsWith('{message')) {
-        response0 = Response(
-            statusCode: response0.statusCode,
-            body: response0.body,
-            statusText: response0.body['message']);
+        response0 = Response(statusCode: response0.statusCode, body: response0.body, statusText: response0.body['message']);
       }
     } else if (response0.statusCode != 200 && response0.body == null) {
       response0 = const Response(statusCode: 0, statusText: noInternetMessage);

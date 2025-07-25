@@ -42,6 +42,10 @@ class SwipeCardController extends GetxController {
   late StreamSubscription newCardEventSub;
   final AppLinks appLinks = AppLinks();
 
+  List<SwipeItem> swipeHistory = [];
+  List<CardData> subCategoryHistory = [];
+  int lastIndex = 0;
+
   @override
   void onInit() {
     super.onInit();
@@ -65,10 +69,7 @@ class SwipeCardController extends GetxController {
       final listString = '[${match.group(1)}]';
       final List<dynamic> decoded = jsonDecode(listString);
 
-      return decoded
-          .whereType<String>()
-          .map((img) => "http://myephysician.com/myratingsystem/uploads/icons/$img")
-          .toList();
+      return decoded.whereType<String>().map((img) => "http://myephysician.com/myratingsystem/uploads/icons/$img").toList();
     } catch (e) {
       print("Image parse error: $e");
       return [];
@@ -96,9 +97,7 @@ class SwipeCardController extends GetxController {
     List<Map<String, dynamic>> filters = [];
 
     if (filterData["filters"] is List) {
-      filters = (filterData["filters"] as List)
-          .map<Map<String, dynamic>>((e) => Map<String, dynamic>.from(e))
-          .toList();
+      filters = (filterData["filters"] as List).map<Map<String, dynamic>>((e) => Map<String, dynamic>.from(e)).toList();
     }
     print("Sending filters payload: ${jsonEncode({"filters": filters})}");
 
@@ -147,6 +146,7 @@ class SwipeCardController extends GetxController {
             })
             .whereType<SwipeItem>()
             .toList();
+        print("Get Card Size:${swipeItems.length}");
 
         if (swipeItems.isNotEmpty) {
           matchEngine = MatchEngine(swipeItems: swipeItems);
@@ -222,17 +222,35 @@ class SwipeCardController extends GetxController {
   // }
 
   void rewindPreviousCard(index) {
-    if (index > 0) {
-      currentCardIndex.value = index-1;
-      currentImageIndex.value = index-1;
-      print("index ${index} : ${currentCardIndex.value} : ${currentImageIndex.value}");
-
+    print("preViousCard Size:-${swipeItems.length}");
+    if (swipeHistory.isEmpty || subCategoryHistory.isEmpty) {
+      return;
     } else {
-      // If we're on the first card, do nothing or move to the last card if desired
-      print('Already at the first card');
+      final lastCard = swipeHistory.last;
+      final lastSubCard = subCategoryHistory.last;
+      // Add back to the top of the stack
+      swipeItems.insert(currentCardIndex.value, lastCard);
+      subCategoryList.insert(currentCardIndex.value, lastSubCard);
+      swipeHistory.clear();
+      subCategoryHistory.clear();
+
+      update();
     }
-    update(); // Update the UI to reflect the change
+
+    // Update UI
   }
+
+  // void rewindPreviousCard(index) {
+  //   if (index > 0) {
+  //     currentCardIndex.value = index - 1;
+  //     currentImageIndex.value = index - 1;
+  //     print("index ${index} : ${currentCardIndex.value} : ${currentImageIndex.value}");
+  //   } else {
+  //     // If we're on the first card, do nothing or move to the last card if desired
+  //     print('Already at the first card');
+  //   }
+  //   update(); // Update the UI to reflect the change
+  // }
 
   void rewindAllCards() {
     currentCardIndex.value = 0;
@@ -247,6 +265,7 @@ class SwipeCardController extends GetxController {
   }
 
   Future<void> likeApi(String cardId) async {
+    print("LikeCard Size:-${swipeItems.length}");
     final isConnected = await AppService.checkInternetConnectivity();
     if (!isConnected) {
       isLoader.value = false;
@@ -348,6 +367,7 @@ class SwipeCardController extends GetxController {
   }
 
   Future<void> superLikeApi(String cardId) async {
+    print("DisLikeCard Size:-${swipeItems.length}");
     final isConnected = await AppService.checkInternetConnectivity();
     if (!isConnected) {
       isLoader.value = false;
