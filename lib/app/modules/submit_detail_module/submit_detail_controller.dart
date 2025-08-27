@@ -112,8 +112,7 @@ class SubmitDetailController extends GetxController {
         );
         print("SHUBHAMTOKEN===user/register=" + response.body["token"]);
         await SecureStorage().writeSecureData("token", response.body["token"]);
-        await SecureStorage()
-            .writeSecureData("userId", response.body["userId"].toString());
+        await SecureStorage() .writeSecureData("userId", response.body["userId"].toString());
 
         await Get.offAllNamed(Routes.CATEGORY);
 
@@ -147,7 +146,7 @@ class SubmitDetailController extends GetxController {
       //clearFields();
       isLoading.value = false;
       isError.value = false;
-      throw Exception("Register exception: $e");
+      //throw Exception("Register exception: $e");
     }
   }
 

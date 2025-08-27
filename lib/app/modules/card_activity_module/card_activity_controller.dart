@@ -52,7 +52,7 @@ class CardActivityController extends GetxController {
       return;
     }
     String authToken = await SecureStorage().readSecureData("token");
-    String userId = await SecureStorage().readSecureData("userId");
+    String userId = await SecureStorage().readSecureData("userId")??"";
 
     print("userId====>${userId}");
     try {

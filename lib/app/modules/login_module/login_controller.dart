@@ -53,10 +53,20 @@ class LoginController extends GetxController {
 
   void sendOtpOnMobile() async {
     isLoading.value = true;
-    final isConnected = await AppService.checkInternetConnectivity();
-    if (!isConnected) {
-      isLoading.value = false;
-      return;
+
+    // Use fast connectivity check first
+    if (!AppService.checkInternetConnectivityFast()) {
+      // If fast check fails, do a full check
+      final isConnected = await AppService.checkInternetConnectivity();
+      if (!isConnected) {
+        isLoading.value = false;
+        AppUtils.showSnackbarError(
+          title: "No Internet",
+          message: "Please check your internet connection and try again.",
+          icon: Icon(Icons.wifi_off, color: Colors.white),
+        );
+        return;
+      }
     }
 
     if (!isPhoneNumberValid()) {
@@ -80,27 +90,50 @@ class LoginController extends GetxController {
         "countrycode": selectedCountryCode.value
       };
 
-      Response response =
-          await apiClient.postData(ApiEndPoints.LOGIN, body, handleError: false);
+      print("====> SENDING LOGIN REQUEST =====");
+      print("====> PHONE: ${phoneController.text}");
+      print("====> COUNTRY CODE: ${selectedCountryCode.value}");
+
+      Response response = await apiClient.postData(ApiEndPoints.LOGIN, body,
+          handleError: false);
       isLoading.value = false;
+
+      print("====> LOGIN RESPONSE RECEIVED =====");
       print("RESP : ${response.body}");
       print("RESP statusCode : ${response.statusCode}");
       print("RESP body : ${body}");
 
+      // Check if response body is null (network error or invalid response)
+      if (response.body == null || response.statusCode == 1) {
+        isLoading.value = false;
+        AppUtils.showSnackbarError(
+          title: "Network Error",
+          message:
+              "Unable to connect to server. Please check your internet connection.",
+        );
+        return;
+      }
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         AppUtils.showSnackbarSuccess(
           title: "Success",
-          message: response.body["message"] ?? "OTP sent successfully!",
+          message: response.body?["message"] ?? "OTP sent successfully!",
           icon: Icon(Icons.password_rounded, color: Colors.white),
         );
 
-        print("SHUBHAMTOKEN===user/login=" + response.body["token"]);
+        print("SHUBHAMTOKEN===user/login=" + (response.body?["token"] ?? ""));
 
-        await SecureStorage().writeSecureData("token", response.body["token"]);
-        AppService().sendFcmToken(response.body["token"], fcmToken.value);
+        final token = response.body?["token"] ?? "";
+        await SecureStorage().writeSecureData("token", token);
+
+        // Update API client with new token
+        final apiClient = Get.find<ApiClient>();
+        apiClient.setAuthToken(token);
+
+        AppService().sendFcmToken(token, fcmToken.value);
 
         await Get.toNamed(Routes.OTP, arguments: {
-          "otp": response.body["otp"],
+          "otp": response.body?["otp"],
           "mobileNumber": phoneController.text,
           "countryCode": selectedCountryCode.value,
         });
@@ -109,18 +142,21 @@ class LoginController extends GetxController {
       } else if ([400, 401, 404, 409].contains(response.statusCode)) {
         phoneController.clear();
         isError.value = true;
-        errorMessage.value = response.body["message"];
+        errorMessage.value =
+            response.body?["message"] ?? "Something went wrong";
         AppUtils.showSnackbarError(
           title: "Something went wrong",
-          message: response.body["message"] ?? "Please try again later",
+          message: response.body?["message"] ?? "Please try again later",
         );
       } else {
         phoneController.clear();
-        errorMessage.value = response.body["error"] ?? "Invalid OTP";
+        errorMessage.value = response.body?["error"] ?? "Invalid OTP";
         isError.value = true;
-        throw Exception("Status code: ${response.statusCode}, Body: ${response.body}");
+        throw Exception(
+            "Status code: ${response.statusCode}, Body: ${response.body}");
       }
     } catch (e) {
+      print("====> LOGIN ERROR: $e");
       AppUtils.showSnackbarError(
         title: "Something went wrong",
         message: "Please try again later",
@@ -129,6 +165,30 @@ class LoginController extends GetxController {
       isLoading.value = false;
       isError.value = false;
       throw Exception("Send OTP Error: $e");
+    }
+  }
+
+  // Method to test API connectivity
+  Future<bool> testApiConnectivity() async {
+    try {
+      print("====> TESTING API CONNECTIVITY =====");
+
+      // Try a simple GET request to test connectivity
+      Response response = await apiClient.getData("health", handleError: false);
+
+      print("====> CONNECTIVITY TEST RESPONSE: ${response.statusCode}");
+
+      if (response.statusCode == 200 || response.statusCode == 404) {
+        print("====> API SERVER IS REACHABLE =====");
+        return true;
+      } else {
+        print(
+            "====> API SERVER RESPONDED WITH ERROR: ${response.statusCode} =====");
+        return false;
+      }
+    } catch (e) {
+      print("====> API CONNECTIVITY TEST FAILED: $e =====");
+      return false;
     }
   }
 }

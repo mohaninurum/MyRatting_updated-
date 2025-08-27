@@ -41,51 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAP4NZ3yt283IaGw3jmYc-mYTqQyjIIWk0',
-    appId: '1:406032902985:web:15e1f71f8a6199f9ed4898',
-    messagingSenderId: '406032902985',
-    projectId: 'swipe-ranks',
-    authDomain: 'swipe-ranks.firebaseapp.com',
-    storageBucket: 'swipe-ranks.firebasestorage.app',
-    measurementId: 'G-F3TEZ4X4W5',
+    apiKey: 'AIzaSyAgBlHqjlWzabqQdupkhb3sngeHu4GgS8o',
+    appId: '1:331120007099:web:cb282fe4fa5ed5d2e9969e',
+    messagingSenderId: '331120007099',
+    projectId: 'myratingsystem',
+    authDomain: 'myratingsystem.firebaseapp.com',
+    storageBucket: 'myratingsystem.firebasestorage.app',
+    measurementId: 'G-2CEJS52VZM',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDBMTgjDTxIYIxHbL0HAFexCxvrj466OfE',
-    appId: '1:406032902985:ios:b8e0d9844d1facf1ed4898',
-    messagingSenderId: '406032902985',
-    projectId: 'swipe-ranks',
-    storageBucket: 'swipe-ranks.firebasestorage.app',
+    apiKey: 'AIzaSyA-rHgFCY_GxsG-nBdi8VdThyX11BdBei8',
+    appId: '1:331120007099:ios:5c419c07a392442ae9969e',
+    messagingSenderId: '331120007099',
+    projectId: 'myratingsystem',
+    storageBucket: 'myratingsystem.firebasestorage.app',
     iosBundleId: 'com.myrating.app',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAP4NZ3yt283IaGw3jmYc-mYTqQyjIIWk0',
-    appId: '1:406032902985:web:8e80c24de327d027ed4898',
-    messagingSenderId: '406032902985',
-    projectId: 'swipe-ranks',
-    authDomain: 'swipe-ranks.firebaseapp.com',
-    storageBucket: 'swipe-ranks.firebasestorage.app',
-    measurementId: 'G-0J52H9WSW9',
+    apiKey: 'AIzaSyAgBlHqjlWzabqQdupkhb3sngeHu4GgS8o',
+    appId: '1:331120007099:web:360c623291d8b43fe9969e',
+    messagingSenderId: '331120007099',
+    projectId: 'myratingsystem',
+    authDomain: 'myratingsystem.firebaseapp.com',
+    storageBucket: 'myratingsystem.firebasestorage.app',
+    measurementId: 'G-06G9V5LHP6',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDBMTgjDTxIYIxHbL0HAFexCxvrj466OfE',
-    appId: '1:406032902985:ios:a197f9f34ca46237ed4898',
-    messagingSenderId: '406032902985',
-    projectId: 'swipe-ranks',
-    storageBucket: 'swipe-ranks.firebasestorage.app',
-    androidClientId: '406032902985-06n17vusmsjn8kcrb3utt2mv5iips6qe.apps.googleusercontent.com',
-    iosClientId: '406032902985-ghc4k88tsdtprh0gnql6misa660f4kv2.apps.googleusercontent.com',
+    apiKey: 'AIzaSyA-rHgFCY_GxsG-nBdi8VdThyX11BdBei8',
+    appId: '1:331120007099:ios:5c419c07a392442ae9969e',
+    messagingSenderId: '331120007099',
+    projectId: 'myratingsystem',
+    storageBucket: 'myratingsystem.firebasestorage.app',
     iosBundleId: 'com.myrating.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyARLbTaK-GDfvkdtfIhhpAhbWXuxsLx1r4',
-    appId: '1:406032902985:android:3db40bbd3c76d9f6ed4898',
-    messagingSenderId: '406032902985',
-    projectId: 'swipe-ranks',
-    storageBucket: 'swipe-ranks.firebasestorage.app',
+    apiKey: 'AIzaSyD6wGudhx064I82K7tIzb3IPL0YNplEmRY',
+    appId: '1:331120007099:android:67b1171aabb0dc73e9969e',
+    messagingSenderId: '331120007099',
+    projectId: 'myratingsystem',
+    storageBucket: 'myratingsystem.firebasestorage.app',
   );
 
 }

@@ -207,14 +207,10 @@ class ProfilePage extends StatelessWidget {
                                   title: "Contact Us",
                                   color: Colors.grey,
                                   onTap: () async {
-                                    final Uri url = Uri.parse(
-                                        "https://www.google.com");
-                                    if (await canLaunchUrl(url)) {
-                                      await launchUrl(url,
-                                          mode: LaunchMode.externalApplication);
-                                    } else {
+                                    final Uri url = Uri.parse("https://swiperanks.com/help/contact.php");
+                                    if ( !await launchUrl(url)) {
                                       throw 'Could not launch $url';
-                                    }
+                                    } 
                                   },
 
                                 ),
@@ -222,8 +218,38 @@ class ProfilePage extends StatelessWidget {
                                   icon: Icons.policy,
                                   title: "Privacy Policy ",
                                   color: Colors.grey,
-                                  onTap: () {
-                                    Get.toNamed(Routes.PRIVACY_POLICY);
+                                  onTap: () async{
+                                     final Uri url = Uri.parse("https://swiperanks.com/help/privacy.html");
+                                    if ( !await launchUrl(url)) {
+                                      throw 'Could not launch $url';
+                                    } 
+                                    // Get.toNamed(Routes.PRIVACY_POLICY);
+                                  },
+                                ),
+                                
+                                _buildOptionTile(
+                                  icon: Icons.privacy_tip,
+                                  title: "Terms Of Service",
+                                  color: Colors.grey,
+                                  onTap: () async{
+                                     final Uri url = Uri.parse("https://swiperanks.com/help/tos.html");
+                                    if ( !await launchUrl(url)) {
+                                      throw 'Could not launch $url';
+                                    } 
+                                    // Get.toNamed(Routes.PRIVACY_POLICY);
+                                  },
+                                ),
+                                
+                                _buildOptionTile(
+                                  icon: Icons.help,
+                                  title: "Help",
+                                  color: Colors.grey,
+                                  onTap: () async{
+                                     final Uri url = Uri.parse("https://swiperanks.com/help/index.html");
+                                    if ( !await launchUrl(url)) {
+                                      throw 'Could not launch $url';
+                                    } 
+                                    // Get.toNamed(Routes.PRIVACY_POLICY);
                                   },
                                 ),
                                /* _buildOptionTile(

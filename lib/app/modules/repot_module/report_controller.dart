@@ -112,6 +112,7 @@ onInit(){
 
   void selectReport(int index) {
     selectedIndex.value = index;
+    update();
   }
 
   void reportApi() async {

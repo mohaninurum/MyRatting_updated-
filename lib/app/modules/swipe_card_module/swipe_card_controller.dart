@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:app_links/app_links.dart';
 import 'package:card/app/api_manager/api_client.dart';
 import 'package:card/app/modules/card_activity_module/card_activity_controller.dart';
@@ -46,6 +47,29 @@ class SwipeCardController extends GetxController {
   List<CardData> subCategoryHistory = [];
   int lastIndex = 0;
 
+  static const String superLikeCountKey = 'superLikeCount';
+  static const String superLikeDateKey = 'superLikeDate';
+
+  Future<int> _getSuperLikeCount() async {
+    final countStr = await storage.read(key: superLikeCountKey);
+    final dateStr = await storage.read(key: superLikeDateKey);
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    if (dateStr != today) {
+      // Reset count for new day
+      await storage.write(key: superLikeCountKey, value: '0');
+      await storage.write(key: superLikeDateKey, value: today);
+      return 0;
+    }
+    return int.tryParse(countStr ?? '0') ?? 0;
+  }
+
+  Future<void> _incrementSuperLikeCount() async {
+    final count = await _getSuperLikeCount();
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    await storage.write(key: superLikeCountKey, value: (count + 1).toString());
+    await storage.write(key: superLikeDateKey, value: today);
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -69,7 +93,10 @@ class SwipeCardController extends GetxController {
       final listString = '[${match.group(1)}]';
       final List<dynamic> decoded = jsonDecode(listString);
 
-      return decoded.whereType<String>().map((img) => "http://myephysician.com/myratingsystem/uploads/icons/$img").toList();
+      return decoded
+          .whereType<String>()
+          .map((img) => "http://swiperanks.com/uploads/icons/$img")
+          .toList();
     } catch (e) {
       print("Image parse error: $e");
       return [];
@@ -97,7 +124,9 @@ class SwipeCardController extends GetxController {
     List<Map<String, dynamic>> filters = [];
 
     if (filterData["filters"] is List) {
-      filters = (filterData["filters"] as List).map<Map<String, dynamic>>((e) => Map<String, dynamic>.from(e)).toList();
+      filters = (filterData["filters"] as List)
+          .map<Map<String, dynamic>>((e) => Map<String, dynamic>.from(e))
+          .toList();
     }
     print("Sending filters payload: ${jsonEncode({"filters": filters})}");
 
@@ -125,7 +154,8 @@ class SwipeCardController extends GetxController {
       if (response.statusCode == 200) {
         final cardResponse = GetCardResponse.fromJson(response.body);
         final fetchedData = cardResponse.data ?? [];
-        final validCards = fetchedData.where((card) => card.status == 2).toList();
+        final validCards =
+            fetchedData.where((card) => card.status == 2).toList();
 
         subCategoryList.assignAll(validCards);
 
@@ -221,23 +251,28 @@ class SwipeCardController extends GetxController {
   //   update(); // Refresh UI
   // }
 
-  void rewindPreviousCard(index) {
-    print("preViousCard Size:-${swipeItems.length}");
+  void rewindPreviousCard() {
     if (swipeHistory.isEmpty || subCategoryHistory.isEmpty) {
       return;
-    } else {
-      final lastCard = swipeHistory.last;
-      final lastSubCard = subCategoryHistory.last;
-      // Add back to the top of the stack
-      swipeItems.insert(currentCardIndex.value, lastCard);
-      subCategoryList.insert(currentCardIndex.value, lastSubCard);
-      swipeHistory.clear();
-      subCategoryHistory.clear();
-
-      update();
     }
+    final lastCard = swipeHistory.removeLast();
+    final lastSubCard = subCategoryHistory.removeLast();
 
-    // Update UI
+    // Remove all duplicates
+    swipeItems.removeWhere((item) => item == lastCard);
+    subCategoryList.removeWhere((item) => item == lastSubCard);
+
+    // Insert at the top
+    swipeItems.insert(0, lastCard);
+    subCategoryList.insert(0, lastSubCard);
+
+    // Set currentCardIndex to 0 so the rewound card is shown
+    currentCardIndex.value = 0;
+
+    // Rebuild the match engine so the UI updates
+    matchEngine = MatchEngine(swipeItems: swipeItems);
+
+    update();
   }
 
   // void rewindPreviousCard(index) {
@@ -297,7 +332,8 @@ class SwipeCardController extends GetxController {
           icon: Icon(Icons.favorite, color: Colors.white)
         );*/
 
-        CardActivityController cardController = Get.find<CardActivityController>();
+        CardActivityController cardController =
+            Get.find<CardActivityController>();
         cardController.getCardActivity();
         cardController.update();
       } else if (response.statusCode == 400) {
@@ -348,7 +384,8 @@ class SwipeCardController extends GetxController {
         );
 */
 
-        CardActivityController cardController = Get.find<CardActivityController>();
+        CardActivityController cardController =
+            Get.find<CardActivityController>();
         cardController.getCardActivity();
         cardController.update();
       } else if (response.statusCode == 400) {
@@ -367,6 +404,26 @@ class SwipeCardController extends GetxController {
   }
 
   Future<void> superLikeApi(String cardId) async {
+    // Check daily limit
+    final count = await _getSuperLikeCount();
+    if (count >= 5) {
+      AppUtils.showSnackbarError(
+        title: "Limit Reached",
+        message: "You can only use 5 Super Likes per day.",
+        icon: Icon(Icons.star, color: Colors.white),
+      );
+      Get.snackbar(
+        "Super Like Limit",
+        "You have reached your daily Super Like limit (5 per day).",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        icon: Icon(Icons.star, color: Colors.white),
+        duration: Duration(seconds: 3),
+      );
+      return;
+    }
+
     print("DisLikeCard Size:-${swipeItems.length}");
     final isConnected = await AppService.checkInternetConnectivity();
     if (!isConnected) {
@@ -393,13 +450,15 @@ class SwipeCardController extends GetxController {
       isLoader.value = false;
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        await _incrementSuperLikeCount();
         /*AppUtils.showSnackbarSuccess(
           title: "Super Liked",
           message: response.body["message"] ?? "SuperLiked successfully",
           icon: Icon(Icons.star, color: Colors.white)
         );*/
 
-        CardActivityController cardController = Get.find<CardActivityController>();
+        CardActivityController cardController =
+            Get.find<CardActivityController>();
         cardController.getCardActivity();
         cardController.update();
       } else if (response.statusCode == 400) {

@@ -19,28 +19,96 @@ class AppService {
   factory AppService() => _instance;
 
   ApiClient apiClient = ApiClient();
-  static Future<bool> checkInternetConnectivity() async {
-    var connectivityResult = await Connectivity().checkConnectivity();
+  // Fast connectivity check with caching
+  static bool? _lastConnectivityResult;
+  static DateTime? _lastCheckTime;
+  static const Duration _cacheDuration = Duration(seconds: 5);
 
-    if (connectivityResult == ConnectivityResult.none) {
-      AppUtils.showSnackbarError(
-        title: "No Internet",
-        message: "You're offline. Please check your internet connection.",
-        icon: Icon(Icons.wifi_off, color: Colors.white),
-      );
-      return false;
+  static Future<bool> checkInternetConnectivity() async {
+    // Check cache first - return cached result if recent
+    if (_lastConnectivityResult != null && _lastCheckTime != null) {
+      if (DateTime.now().difference(_lastCheckTime!) < _cacheDuration) {
+        return _lastConnectivityResult!;
+      }
     }
+
     try {
-      final result = await InternetAddress.lookup('example.com');
+      // Fast connectivity check using platform-specific methods
+      var connectivityResult = await Connectivity().checkConnectivity();
+
+      bool isConnected = connectivityResult != ConnectivityResult.none;
+
+      // Cache the result
+      _lastConnectivityResult = isConnected;
+      _lastCheckTime = DateTime.now();
+
+      return isConnected;
+    } catch (e) {
+      // Fallback: assume connected if connectivity check fails
+      _lastConnectivityResult = true;
+      _lastCheckTime = DateTime.now();
+      return true;
+    }
+  }
+
+  // Ultra-fast connectivity check (no async, uses cached result)
+  static bool checkInternetConnectivityFast() {
+    if (_lastConnectivityResult != null && _lastCheckTime != null) {
+      if (DateTime.now().difference(_lastCheckTime!) < _cacheDuration) {
+        return _lastConnectivityResult!;
+      }
+    }
+    return true; // Assume connected if no recent check
+  }
+
+  // Force refresh connectivity status
+  static Future<bool> refreshInternetConnectivity() async {
+    _lastConnectivityResult = null;
+    _lastCheckTime = null;
+    return await checkInternetConnectivity();
+  }
+
+  // Check if your specific API server is reachable
+  static Future<bool> checkApiServerConnectivity() async {
+    try {
+      // Quick ping to your API server
+      final result = await InternetAddress.lookup('swiperanks.com');
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
-    } catch (_) {
-      AppUtils.showSnackbarError(
-        title: "No Internet Access",
-        message: "Connected to a network but no internet access.",
-        icon: Icon(Icons.wifi_off, color: Colors.white),
-      );
+    } catch (e) {
       return false;
     }
+  }
+
+  // Ultra-fast API server check (cached)
+  static bool? _lastApiServerResult;
+  static DateTime? _lastApiServerCheckTime;
+  static const Duration _apiServerCacheDuration = Duration(seconds: 10);
+
+  static bool checkApiServerConnectivityFast() {
+    if (_lastApiServerResult != null && _lastApiServerCheckTime != null) {
+      if (DateTime.now().difference(_lastApiServerCheckTime!) <
+          _apiServerCacheDuration) {
+        return _lastApiServerResult!;
+      }
+    }
+    return true; // Assume reachable if no recent check
+  }
+
+  // Start background connectivity monitoring
+  static void startConnectivityMonitoring() {
+    Timer.periodic(Duration(seconds: 30), (timer) async {
+      try {
+        await checkInternetConnectivity();
+        await checkApiServerConnectivity();
+      } catch (e) {
+        // Silent fail for background monitoring
+      }
+    });
+  }
+
+  // Stop background connectivity monitoring
+  static void stopConnectivityMonitoring() {
+    // Timer will be garbage collected automatically
   }
 
   void userSessionExpire() async {

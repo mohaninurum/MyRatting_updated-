@@ -30,19 +30,15 @@ class CreateAccountPage extends StatelessWidget {
           SizedBox(
             height: 1,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
             children: [
               Image.asset(
-                "assets/images/logo.png",
-                height: 35,
-                color: Colors.white,
-              ),
-              SizedBox(
-                width: 10,
+                "assets/images/logo_launcher_transparent.png",
+                height: 95,
+                // color: Colors.white,
               ),
               Text(
-                "My Rating App",
+                "Swipe Ranks",
                 style: AppFonts.IBMPlexSans.copyWith(
                     fontSize: 30, fontWeight: FontWeight.bold, color: AppColors.white),
               ),

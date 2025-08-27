@@ -44,7 +44,8 @@ class OtpController extends GetxController {
       return;
     }
     if (otpController.text.isEmpty || otpController.text.length != 6) {
-      AppUtils.showSnackbarError(title: "Invalid",
+      AppUtils.showSnackbarError(
+          title: "Invalid",
           message: "Please enter 6 digit otp",
           icon: Icon(Icons.phone_rounded, color: Colors.white));
       return;
@@ -56,26 +57,39 @@ class OtpController extends GetxController {
       isError.value = false;
       Map<String, dynamic> body = {
         "otp": otpCode.value,
-        "mobilenumber": mobileNumber.value};
-      Response response = await apiClient.postData(
-          ApiEndPoints.VERIFY_OTP, body, handleError: false);
+        "mobilenumber": mobileNumber.value
+      };
+      Response response = await apiClient
+          .postData(ApiEndPoints.VERIFY_OTP, body, handleError: false);
       isLoading.value = false;
+      // Check if response body is null (network error or invalid response)
+      if (response.body == null || response.statusCode == 1) {
+        isLoading.value = false;
+        AppUtils.showSnackbarError(
+          title: "Network Error",
+          message:
+              "Unable to connect to server. Please check your internet connection.",
+        );
+        return;
+      }
+
       if (response.statusCode == 200 || response.statusCode == 201) {
-        AppUtils.showSnackbarSuccess(title: "Success",
-            message: response.body["message"] ?? "OTP sent successfully!",
+        AppUtils.showSnackbarSuccess(
+            title: "Success",
+            message: response.body?["message"] ?? "OTP sent successfully!",
             icon: Icon(Icons.password_rounded, color: Colors.white));
 
-        print("SHUBHAMTOKEN===user/otp="+response.body["token"]);
+        print("SHUBHAMTOKEN===user/otp=" + (response.body?["token"] ?? ""));
 
-
-
-        await SecureStorage().writeSecureData("token", response.body["token"]);
-        await SecureStorage().writeSecureData("userId", response.body["userId"].toString());
-        int isLogin = response.body["islogin"];
+        await SecureStorage()
+            .writeSecureData("token", response.body?["token"] ?? "");
+        await SecureStorage().writeSecureData(
+            "userId", (response.body?["userId"] ?? "").toString());
+        int isLogin = response.body?["islogin"] ?? 0;
         if (isLogin == 0) {
-          Get.toNamed(Routes.TERMCONDITION,arguments: {
-            "mobile":mobileNumber.value,
-            "countryCode":countryCode.value,
+          Get.toNamed(Routes.TERMCONDITION, arguments: {
+            "mobile": mobileNumber.value,
+            "countryCode": countryCode.value,
             "type": "phone"
           });
         } else {
@@ -84,28 +98,27 @@ class OtpController extends GetxController {
       } else if (response.statusCode == 400) {
         otpController.clear();
         isError.value = true;
-        errorMessage.value = response.body["message"];
+        errorMessage.value = response.body?["message"] ?? "Invalid OTP";
       } else if (response.statusCode == 404) {
-        AppUtils.showSnackbarError(title: "Something went wrong",
-            message: response.body["message"] ?? "Please try again later");
-      }
-      else {
+        AppUtils.showSnackbarError(
+            title: "Something went wrong",
+            message: response.body?["message"] ?? "Please try again later");
+      } else {
         otpController.clear();
-        errorMessage.value = response.body["error"] ?? "Invalid Mobile Number";
+        errorMessage.value = response.body?["error"] ?? "Invalid Mobile Number";
         isError.value = true;
-        throw Exception("On Else When try to login Status code: ${response
-            .statusCode}\nBody: ${response.body}");
+        throw Exception(
+            "On Else When try to login Status code: ${response.statusCode}\nBody: ${response.body}");
       }
     } catch (e) {
       AppUtils.showSnackbarError(
           title: "Something went wrong", message: "Please try again later");
-
       otpController.clear();
       isLoading.value = false;
       isError.value = false;
-      throw Exception("On Catch When try to login $e");
     }
   }
+
   void resendOtp() async {
     isLoading.value = true;
     final isConnected = await AppService.checkInternetConnectivity();
@@ -116,39 +129,57 @@ class OtpController extends GetxController {
 
     FocusManager.instance.primaryFocus?.unfocus();
     isLoading.value = true;
-    try{
+    try {
       isLoading.value = true;
       isError.value = false;
-      Map<String,dynamic> body = {"mobilenumber":mobileNumber,
-        "countrycode":countryCode};
-      Response response = await apiClient.postData(ApiEndPoints.LOGIN, body,handleError: false);
+      Map<String, dynamic> body = {
+        "mobilenumber": mobileNumber,
+        "countrycode": countryCode
+      };
+      Response response = await apiClient.postData(ApiEndPoints.LOGIN, body,
+          handleError: false);
       isLoading.value = false;
       otpController.clear();
-      if(response.statusCode==200 || response.statusCode==201){
-        AppUtils.showSnackbarSuccess(title: "Success",message: response.body["message"]??"OTP sent successfully!",icon: Icon(Icons.password_rounded,color: Colors.white));
-        otpController.text = response.body["otp"];
-
-      }else if(response.statusCode==400 || response.statusCode == 401|| response.statusCode == 404 || response.statusCode == 409){
-
-        isError.value = true;
-        errorMessage.value = response.body["message"];
-        AppUtils.showSnackbarError(title: "Something went wrong",message: response.body["message"]?? "Please try again later");
-
+      // Check if response body is null (network error or invalid response)
+      if (response.body == null || response.statusCode == 1) {
+        isLoading.value = false;
+        AppUtils.showSnackbarError(
+          title: "Network Error",
+          message:
+              "Unable to connect to server. Please check your internet connection.",
+        );
+        return;
       }
-      else{
 
-        errorMessage.value = response.body["error"]??"Invalid otp";
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        AppUtils.showSnackbarSuccess(
+            title: "Success",
+            message: response.body?["message"] ?? "OTP sent successfully!",
+            icon: Icon(Icons.password_rounded, color: Colors.white));
+        otpController.text = response.body?["otp"] ?? "";
+      } else if (response.statusCode == 400 ||
+          response.statusCode == 401 ||
+          response.statusCode == 404 ||
+          response.statusCode == 409) {
         isError.value = true;
-        throw Exception("On Else When try to login Status code: ${response.statusCode}\nBody: ${response.body}");
+        errorMessage.value =
+            response.body?["message"] ?? "Something went wrong";
+        AppUtils.showSnackbarError(
+            title: "Something went wrong",
+            message: response.body?["message"] ?? "Please try again later");
+      } else {
+        errorMessage.value = response.body?["error"] ?? "Invalid otp";
+        isError.value = true;
+        throw Exception(
+            "On Else When try to login Status code: ${response.statusCode}\nBody: ${response.body}");
       }
-    }catch(e){
-      AppUtils.showSnackbarError(title: "Something went wrong",message:"Please try again later");
-
+    } catch (e) {
+      AppUtils.showSnackbarError(
+          title: "Something went wrong", message: "Please try again later");
 
       isLoading.value = false;
       isError.value = false;
       throw Exception("On Catch When try to login $e");
     }
   }
-
 }

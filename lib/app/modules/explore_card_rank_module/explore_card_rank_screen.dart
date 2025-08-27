@@ -76,7 +76,7 @@ class ExploreCardRankScreen extends StatelessWidget {
 
   Widget _buildCard(TopData card, int index) {
     final String itemName = card.title ?? 'Unknown';
-    const String baseUrl = 'http://myephysician.com/myratingsystem/uploads/icons/';
+    const String baseUrl = 'http://swiperanks.com/uploads/icons/';
 
     String imagePath = '';
 

@@ -69,7 +69,7 @@ class ProfileController extends GetxController {
       return;
     }
     String authToken = await SecureStorage().readSecureData("token");
-    String userId = await SecureStorage().readSecureData("userId");
+    String userId = await SecureStorage().readSecureData("userId")??"";
 
     try {
       isLoader.value = true;

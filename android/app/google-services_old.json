@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "331120007099",
+    "project_id": "myratingsystem",
+    "storage_bucket": "myratingsystem.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331120007099:android:67b1171aabb0dc73e9969e",
+        "android_client_info": {
+          "package_name": "com.swipe.ranks"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6wGudhx064I82K7tIzb3IPL0YNplEmRY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

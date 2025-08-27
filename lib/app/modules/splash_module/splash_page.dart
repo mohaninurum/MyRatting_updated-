@@ -13,9 +13,8 @@ class SplashPage extends StatelessWidget {
       color: AppColors.secondaryColor,
       child: Center(
           child: Image.asset(
-        "assets/images/logo.png",
+        "assets/images/logo_launcher_transparent.png",
         height: 100,
-        color: Colors.white,
       )),
     ));
   }

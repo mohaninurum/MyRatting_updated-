@@ -1,4 +1,5 @@
 import 'package:card/app/api_manager/api_client.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -29,59 +30,57 @@ class CreateAccountController extends GetxController {
   Future<void> handleSignIn() async {
     isGoogleLoading.value = true;
     try {
-      print("in try");
-      await googleSignIn.signIn().then((value) {
-        if (value != null) {
-          debugPrint("User signed in: ${value.displayName}, ${value.email}");
-          print("Enter====>$value");
+      print("Attempting Google Sign-In...");
+      final googleUser = await googleSignIn.signIn();
 
-          googleLogin(
-            value.id,
-            value.displayName ?? "",
-            value.email ?? "",
-          );
-        } else {
-          debugPrint("Sign in was null");
-          isGoogleLoading(false);
-        }
-      }).onError((error, stackTrace) {
-        debugPrint("$error");
-        print("In google sign-in API");
-        debugPrint("Catch error: $error");
-        isGoogleLoading(false);
-      });
-    } catch (error, stacktrace) {
+      if (googleUser == null) {
+        debugPrint("SUser cancelled Google Sign-In");
+        isGoogleLoading.value = false;
+        return;
+      }
+
+      final googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      debugPrint(
+          "User signed in: ${googleUser.displayName}, ${googleUser.email}");
+
+      googleLogin(
+        googleUser.id,
+        googleUser.displayName ?? "",
+        googleUser.email ?? "",
+      );
+    } catch (error, stackTrace) {
       isGoogleLoading.value = false;
-      debugPrint("Catch error: $error");
-      print("Stacktrace====>${stacktrace}");
-      debugPrint(error.toString());
+      debugPrint("Sign-In error: $error");
+      print("StackTrace: $stackTrace");
     }
   }
 
   void googleLogin(String userId, String firstName, String email) async {
-    isLoading.value = true;
-
-    final isConnected = await AppService.checkInternetConnectivity();
-    if (!isConnected) {
-      isLoading.value = false;
-      AppUtils.showSnackbarError(
-        title: "No Internet",
-        message: "Please check your internet connection.",
-      );
-      return;
-    }
-    if (await googleSignIn.isSignedIn()) {
-      print("User already signed in, signing out first...");
-      await googleSignIn.signOut();
-    }
     try {
-      Map<String, dynamic> body = {
+      isLoading.value = true;
+
+      final isConnected = await AppService.checkInternetConnectivity();
+      if (!isConnected) {
+        isLoading.value = false;
+        AppUtils.showSnackbarError(
+          title: "No Internet",
+          message: "Please check your internet connection.",
+        );
+        return;
+      }
+
+      final body = {
         "uId": userId,
         "login_type": "Google",
         "fullname": firstName,
         "email": email,
       };
-
 
       final response = await apiClient.postData(
         ApiEndPoints.SOCIALOGIN,
@@ -91,14 +90,30 @@ class CreateAccountController extends GetxController {
 
       isLoading.value = false;
 
+      // Check if response body is null (network error or invalid response)
+      if (response.body == null || response.statusCode == 1) {
+        isLoading.value = false;
+        AppUtils.showSnackbarError(
+          title: "Network Error",
+          message:
+              "Unable to connect to server. Please check your internet connection.",
+        );
+        return;
+      }
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.body;
-        await SecureStorage().writeSecureData("token", response.body["token"]);
-        await SecureStorage().writeSecureData("userId", response.body["userId"].toString());
-        /* final token = data["token"];
-        final userId = data["userId"].toString();*/
-        final isAuthorized = data["is_authorize"];
 
+        if (data?["token"] != null && data?["userId"] != null) {
+          await SecureStorage().writeSecureData("token", data["token"]);
+          await SecureStorage()
+              .writeSecureData("userId", data["userId"].toString());
+        } else {
+          throw Exception("Missing token or userId in response");
+        }
+
+        final isAuthorized = data["is_authorize"];
+        print("IsAuthorized value ::: $isAuthorized");
         //  Get.find<AppService>().sendFcmToken(token, fcmToken.value);
 
         if (isAuthorized == 0) {
@@ -119,7 +134,7 @@ class CreateAccountController extends GetxController {
         isError.value = true;
         AppUtils.showSnackbarError(
           title: "Login Failed",
-          message: response.body["message"] ?? "Please try again later.",
+          message: response.body?["message"] ?? "Please try again later.",
         );
       } else {
         isError.value = true;

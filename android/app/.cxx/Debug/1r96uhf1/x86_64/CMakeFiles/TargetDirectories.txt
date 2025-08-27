@@ -1,0 +1,2 @@
+/Volumes/E/Flutter_Project/swip_rank/android/app/.cxx/Debug/1r96uhf1/x86_64/CMakeFiles/edit_cache.dir
+/Volumes/E/Flutter_Project/swip_rank/android/app/.cxx/Debug/1r96uhf1/x86_64/CMakeFiles/rebuild_cache.dir

@@ -16,7 +16,7 @@ class CardDetailController extends GetxController {
 
   var currentIndex = 0.obs;
   late PageController pageController;
-  late Timer _timer;
+   Timer? _timer;
 
   RxString cardId = "".obs;
   RxBool isLoading = false.obs;
@@ -43,7 +43,7 @@ class CardDetailController extends GetxController {
       final List<dynamic> decodedList = jsonDecode(jsonArray);
 
       return decodedList
-          .map((img) => "http://myephysician.com/myratingsystem/uploads/icons/$img")
+          .map((img) => "http://swiperanks.com/uploads/icons/$img")
           .toList();
     } catch (e) {
       print("Image parsing failed: $e");
@@ -115,7 +115,7 @@ class CardDetailController extends GetxController {
 
   @override
   void onClose() {
-    _timer.cancel();
+    _timer?.cancel();
     pageController.dispose();
     super.onClose();
   }

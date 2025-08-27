@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>406032902985-ghc4k88tsdtprh0gnql6misa660f4kv2.apps.googleusercontent.com</string>
+	<string>331120007099-kch78oa8eveb6tvr6nmltihi2n1nr4st.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.406032902985-ghc4k88tsdtprh0gnql6misa660f4kv2</string>
+	<string>com.googleusercontent.apps.331120007099-kch78oa8eveb6tvr6nmltihi2n1nr4st</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>406032902985-06n17vusmsjn8kcrb3utt2mv5iips6qe.apps.googleusercontent.com</string>
+	<string>331120007099-7ht9g7hm59n1f76favo2s7ammv9cd3fj.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDBMTgjDTxIYIxHbL0HAFexCxvrj466OfE</string>
+	<string>AIzaSyA-rHgFCY_GxsG-nBdi8VdThyX11BdBei8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>406032902985</string>
+	<string>331120007099</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.myrating.app</string>
 	<key>PROJECT_ID</key>
-	<string>swipe-ranks</string>
+	<string>myratingsystem</string>
 	<key>STORAGE_BUCKET</key>
-	<string>swipe-ranks.firebasestorage.app</string>
+	<string>myratingsystem.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:406032902985:ios:a197f9f34ca46237ed4898</string>
+	<string>1:331120007099:ios:5c419c07a392442ae9969e</string>
 </dict>
 </plist>

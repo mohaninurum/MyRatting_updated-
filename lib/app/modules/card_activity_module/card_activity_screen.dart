@@ -193,7 +193,7 @@ class CardActivityScreen extends StatelessWidget {
     );
   }
   String getParsedImagePath(String? imageUrl) {
-    const String baseUrl = 'http://myephysician.com/myratingsystem/uploads/icons/';
+    const String baseUrl = 'http://swiperanks.com/uploads/icons/';
     if (imageUrl == null || imageUrl.isEmpty) return '';
     if (imageUrl.startsWith(baseUrl) && imageUrl.substring(baseUrl.length).trim().startsWith('[')) {
       try {
